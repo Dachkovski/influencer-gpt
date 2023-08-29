@@ -110,17 +110,17 @@ def main():
         # Lassen Sie den Benutzer das generierte Skript bearbeiten
         edited_script = st.text_area("Edit the generated script:", script)
         
-        # Button, um die Bearbeitung zu bestätigen und fortzufahren
+        # Button to confirm editing and proceed to video generation
         if st.button("Confirm and Generate Video"):
-            # Verwenden Sie das bearbeitete Skript für die Videoerstellung
+            # Use the edited script for video generation
             # Initialization
             if 'video_engine' not in st.session_state:
                 st.session_state['video_engine'] = 'D-ID'
             video_engine_choice = st.session_state['video_engine']
 
-            st.write(f"Generation Video with {video_engine_choice} for ", query)
-            
-            # Entscheidung, welche Trendsuchfunktion zu verwenden ist
+            st.write(f"Generating Video with {video_engine_choice} for ", query)
+        
+            # Decide which trend search function to use
             if video_engine_choice == "Heygen":
                 video_url = create_heygen_video(edited_script)
                 if video_url:
@@ -134,10 +134,20 @@ def main():
                 talk_id = talk.get("id")
                 print(f"Talk ID: {talk_id}")
 
-                # Überprüfen, ob das Video fertig ist
+                # Check if the video is ready
                 video_url = asyncio.run(check_video_status_async(d_id_client, talk_id))
                 if video_url:
                     st.write(f"Video URL: {video_url}")
+                    # Preview the video
+                    preview_video(video_url)
+                    # Ask the user to confirm the upload to YouTube
+                    if st.button("Confirm and Upload to YouTube"):
+                        # Initialize the YoutubeClient
+                        youtube_client = YoutubeClient(st.session_state['YOUTUBE_API_KEY'])
+                        youtube_client.authenticate()
+                        # Upload the video to YouTube
+                        youtube_client.upload_video(video_url, "Generated Video", "This video was generated using AI.", "22", ["AI", "Generated Video"])
+                        st.success("Video uploaded successfully to YouTube!")
                 else:
                     st.error("Failed to create video.")
 
