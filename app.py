@@ -8,6 +8,7 @@ import streamlit as st
 import json
 from clients.d_id import DIdClient
 from clients.heygen import create_heygen_video
+from clients.youtube import YoutubeClient
 import asyncio
 
 # Set Streamlit page configuration
@@ -155,3 +156,5 @@ def main():
 if __name__ == '__main__':
     main()
 
+def preview_video(video_url):
+    st.video(video_url)
