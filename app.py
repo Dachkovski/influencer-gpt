@@ -1,3 +1,4 @@
+# Import necessary libraries
 import os
 import openai
 from dotenv import load_dotenv
@@ -8,23 +9,25 @@ import json
 from clients.d_id import DIdClient
 import asyncio
 
+# Set Streamlit page configuration
 st.set_page_config(page_title="Influencer GPT", page_icon=":bird:")
 
-# Laden Sie die Umgebungsvariablen
+# Load environment variables
 load_dotenv()
 
-# Twitter API Authentifizierung
+# Authenticate Twitter API
 bearer_token = st.session_state.get('TWITTER_BEARER_TOKEN', '')
 twitter_client = tweepy.Client(bearer_token)
 
-# OpenAI API Authentifizierung
+# Authenticate OpenAI API
 openai.api_key = st.session_state.get('YOUR_OPENAI_API_KEY', '')
 
-# HeyGen API Konfiguration
+# Configure HeyGen API
 HEYGEN_API_ENDPOINT = "https://api.heygen.com/v1/video.generate"
 HEYGEN_API_KEY = st.session_state.get('HEYGEN_API_KEY', '')
 avatar_id = os.getenv("YOUR_AVATAR_ID")  # Assuming this is still from an env variable
 
+# Authenticate D-ID API
 D_ID_API_KEY = st.session_state.get('D_ID_API_KEY', '')
 d_id_client = DIdClient(api_key=D_ID_API_KEY)
 

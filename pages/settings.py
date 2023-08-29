@@ -1,27 +1,30 @@
 # settings.py
+# Import necessary libraries
 import streamlit as st
 import json
 
+# Set Streamlit page configuration
 st.set_page_config(page_title="Settings", page_icon="📈")
 
+# Display header and description
 st.header("Settings")
 st.write("Here you can adjust the settings for the app.")
 
-# Auswahlmöglichkeit für die Trendsuchfunktion
+# Provide option to select Trend Search Engine
 st.subheader("Trend Search Engine")
 st.session_state['trend_engine'] = st.selectbox(
     "Select Trend Search Engine",
     ("X", "GPT")
 )
 
-# Auswahlmöglichkeit für die Trendsuchfunktion
+# Provide option to select Video Generation Engine
 st.subheader("Video Generation Engine")
 st.session_state['video_engine'] = st.selectbox(
     "Select Video Generation Engine",
     ("D-ID", "Heygen")
 )
 
-# API Key configurations
+# Configure API Keys
 st.subheader("API Key Configurations")
 st.session_state['TWITTER_BEARER_TOKEN'] = st.text_input("Twitter Bearer Token", type="password")
 st.session_state['YOUR_OPENAI_API_KEY'] = st.text_input("OpenAI API Key", type="password")
@@ -39,7 +42,9 @@ if st.button("Save Settings"):
         'video_engine': st.session_state['video_engine']
     }
     
+    # Save settings data to a JSON file
     with open("settings.json", "w") as f:
         json.dump(settings_data, f)
     
+    # Display success message
     st.success("Settings saved successfully!")
