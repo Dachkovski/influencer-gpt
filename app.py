@@ -7,6 +7,7 @@ import tweepy
 import streamlit as st
 import json
 from clients.d_id import DIdClient
+from clients.heygen import create_heygen_video
 import asyncio
 
 # Set Streamlit page configuration
@@ -65,7 +66,6 @@ def create_video_script(topic):
     script = completion.choices[0].message.get("content")
     return script
 
-from clients.heygen import create_heygen_video
 
 
 async def check_video_status_async(d_id_client, talk_id):
