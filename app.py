@@ -8,7 +8,7 @@ import json
 from clients.d_id import DIdClient
 import asyncio
 
-st.set_page_config(page_title="AI research agent", page_icon=":bird:")
+st.set_page_config(page_title="Influencer GPT", page_icon=":bird:")
 
 # Laden Sie die Umgebungsvariablen
 load_dotenv()
@@ -163,9 +163,6 @@ def main():
                     st.write(f"Video URL: {video_url}")
                 else:
                     st.error("Failed to create video.")
-
-
-
 
 
 if __name__ == '__main__':

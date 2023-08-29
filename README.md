@@ -1,20 +1,18 @@
-Certainly! Here's a README template for your AI research agent app:
 # Influencer GPT 🐦
 
-Influencer GPT is a Streamlit application that leverages OpenAI's GPT-3.5 Turbo model to search for trends, generate video scripts, and post videos to platforms like YouTube, Instagram, and TikTok.
+Influencer GPT is a Streamlit application designed to assist influencers and content creators. It leverages OpenAI's GPT-3.5 Turbo model to search for trends, generate video scripts, and offers the possibility to post videos to platforms like YouTube, Instagram, and TikTok.
 
 ## Features
 
-- **Trend Search**: Search for the latest trends using either Twitter or GPT-3.
-- **Video Script Generation**: Generate video scripts based on the selected trend.
-- **Video Creation**: Create videos using either D-ID or HeyGen.
-- **Video Posting**: Post videos to YouTube, Instagram, and TikTok with auto-generated metadata (title, description, hashtags).
+- **Trend Search**: Discover the latest trends using Twitter or GPT-3.
+- **Video Script Generation**: Automatically generate video scripts based on the selected trend.
+- **Video Creation**: Produce videos using either D-ID or HeyGen.
+- **Video Posting**: (Coming Soon) Post videos to YouTube, Instagram, and TikTok with auto-generated metadata (title, description, hashtags).
 
 ## Prerequisites
 
 - Python 3.7+
 - OpenAI API key
-- YouTube Data API v3 credentials
 - Twitter API credentials
 - D-ID API key
 - HeyGen API key
@@ -23,8 +21,8 @@ Influencer GPT is a Streamlit application that leverages OpenAI's GPT-3.5 Turbo 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/ai-research-agent.git
-   cd ai-research-agent
+   git clone https://github.com/yourusername/influencer-gpt.git
+   cd influencer-gpt
    ```
 
 2. Install the required packages:
@@ -33,7 +31,7 @@ Influencer GPT is a Streamlit application that leverages OpenAI's GPT-3.5 Turbo 
    ```
 
 3. Set up your API keys and credentials:
-   - Open the `settings.py` file and configure the API keys and credentials for OpenAI, Twitter, YouTube, D-ID, and HeyGen.
+   - Open the `settings.py` file and configure the API keys and credentials for OpenAI, Twitter, D-ID, and HeyGen.
 
 4. Run the Streamlit app:
    ```bash
@@ -47,7 +45,6 @@ Influencer GPT is a Streamlit application that leverages OpenAI's GPT-3.5 Turbo 
 3. Select a trend from the generated list.
 4. Edit the generated video script if needed.
 5. Confirm and generate the video.
-6. Optionally, upload the video to YouTube, Instagram, and TikTok.
 
 ## Contributing
 
