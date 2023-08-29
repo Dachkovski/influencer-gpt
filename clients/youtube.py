@@ -14,4 +14,31 @@ class YoutubeClient:
         # TODO: Implement authentication with YouTube API
 
     def upload_video(self, video_file_path, title, description, category_id, tags):
-        # TODO: Implement video upload to YouTube
+        # Create a resource object for the video
+        body=dict(
+            snippet=dict(
+                title=title,
+                description=description,
+                tags=tags,
+                categoryId=category_id
+            ),
+            status=dict(
+                privacyStatus='public'
+            )
+        )
+
+        # Call the API's videos.insert method to create and upload the video
+        insert_request = self.youtube.videos().insert(
+            part=','.join(body.keys()),
+            body=body,
+            media_body=MediaFileUpload(video_file_path, chunksize=-1, resumable=True)
+        )
+
+        response = None
+        while response is None:
+            status, response = insert_request.next_chunk()
+            if status:
+                print("Uploaded %d%%." % int(status.progress() * 100))
+
+        print("Upload Complete!")
+        return response
