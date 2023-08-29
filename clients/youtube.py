@@ -11,7 +11,7 @@ class YoutubeClient:
         self.youtube = None
 
     def authenticate(self):
-        # TODO: Implement authentication with YouTube API
+        self.youtube = build('youtube', 'v3', developerKey=self.api_key)
 
     def upload_video(self, video_file_path, title, description, category_id, tags):
         # Create a resource object for the video
