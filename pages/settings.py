@@ -30,6 +30,7 @@ st.session_state['TWITTER_BEARER_TOKEN'] = st.text_input("Twitter Bearer Token",
 st.session_state['YOUR_OPENAI_API_KEY'] = st.text_input("OpenAI API Key", type="password")
 st.session_state['HEYGEN_API_KEY'] = st.text_input("HeyGen API Key", type="password")
 st.session_state['D_ID_API_KEY'] = st.text_input("D-ID API Key", type="password")
+st.session_state['YOUTUBE_API_KEY'] = st.text_input("YouTube API Key", type="password")
 
 # Save button to persistently save the settings
 if st.button("Save Settings"):
@@ -38,6 +39,7 @@ if st.button("Save Settings"):
         'YOUR_OPENAI_API_KEY': st.session_state['YOUR_OPENAI_API_KEY'],
         'HEYGEN_API_KEY': st.session_state['HEYGEN_API_KEY'],
         'D_ID_API_KEY': st.session_state['D_ID_API_KEY'],
+        'YOUTUBE_API_KEY': st.session_state['YOUTUBE_API_KEY'],
         'trend_engine': st.session_state['trend_engine'],
         'video_engine': st.session_state['video_engine']
     }
