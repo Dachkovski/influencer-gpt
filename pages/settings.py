@@ -32,6 +32,13 @@ st.session_state['HEYGEN_API_KEY'] = st.text_input("HeyGen API Key", type="passw
 st.session_state['D_ID_API_KEY'] = st.text_input("D-ID API Key", type="password")
 st.session_state['YOUTUBE_API_KEY'] = st.text_input("YouTube API Key", type="password")
 
+# Provide option to select YouTube video category
+st.subheader("YouTube Video Category")
+st.session_state['YOUTUBE_VIDEO_CATEGORY'] = st.selectbox(
+    "Select YouTube Video Category",
+    ("Film & Animation", "Autos & Vehicles", "Music", "Pets & Animals", "Sports", "Travel & Events", "Gaming", "People & Blogs", "Comedy", "Entertainment", "News & Politics", "Howto & Style", "Education", "Science & Technology", "Nonprofits & Activism")
+)
+
 # Save button to persistently save the settings
 if st.button("Save Settings"):
     settings_data = {

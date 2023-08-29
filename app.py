@@ -147,7 +147,7 @@ def main():
                         youtube_client = YoutubeClient(st.session_state['YOUTUBE_API_KEY'])
                         youtube_client.authenticate()
                         # Upload the video to YouTube
-                        youtube_client.upload_video(video_url, "Generated Video", "This video was generated using AI.", "22", ["AI", "Generated Video"])
+                        youtube_client.upload_video(video_url, "Generated Video", "This video was generated using AI.", st.session_state['YOUTUBE_VIDEO_CATEGORY'], ["AI", "Generated Video"])
                         st.success("Video uploaded successfully to YouTube!")
                 else:
                     st.error("Failed to create video.")
