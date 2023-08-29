@@ -1,2 +1,5 @@
 
 .env
+settings.json
+clients/__pycache__/d_id.cpython-311.pyc
+.DS_Store
