@@ -81,8 +81,8 @@ def main():
         
         for key, value in settings_data.items():
             st.session_state[key] = value
-    st.header("AI research agent :bird:")
-    query = st.text_input("Research goal")
+    st.header("Influencer GPT :bird:")
+    query = st.text_input("Trend Topic")
 
     if query:
         # Initialization
