@@ -1,16 +1,18 @@
 import os
+#from dotenv import load_dotenv
 import requests
 import tweepy
 import streamlit as st
 
 # Laden Sie die Umgebungsvariablen
-load_dotenv()
+#load_dotenv()
 
 # Twitter API Authentifizierung
 twitter_api_key = os.getenv("TWITTER_API_KEY")
 twitter_api_secret_key = os.getenv("TWITTER_API_SECRET_KEY")
 twitter_access_token = os.getenv("TWITTER_ACCESS_TOKEN")
 twitter_access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+openai_api_key = os.getenv("YOUR_open_ai_api_key")
 
 auth = tweepy.OAuthHandler(twitter_api_key, twitter_api_secret_key)
 auth.set_access_token(twitter_access_token, twitter_access_token_secret)
@@ -24,10 +26,22 @@ def search_twitter_trends(topic):
     trends = twitter_api.search(q=topic, count=10)
     return [trend.text for trend in trends]
 
-def create_video_script(trends):
-    script = "Here are the top trends on Twitter about {}: \n".format(topic)
-    for trend in trends:
-        script += "- {}\n".format(trend)
+# generate video script with openai gpt api 
+def create_video_script(topic):
+    url = "https://api.openai.com/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {openai_api_key}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "messages": [
+            {"role": "system", "content": "You are a script generator for heygen."},
+            {"role": "user", "content": f"Create a script about {topic}."}
+        ]
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    response_json = response.json()
+    script = response_json["choices"][0]["message"]["content"]
     return script
 
 def create_heygen_video(script):
