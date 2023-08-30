@@ -1,5 +1,8 @@
-openai
-tweepy
-pandas
-requests
-streamlit
+google_api_python_client==2.97.0
+google_auth_oauthlib==1.0.0
+openai==0.27.6
+protobuf==4.24.2
+python-dotenv==1.0.0
+Requests==2.31.0
+streamlit==1.26.0
+tweepy==4.14.0
