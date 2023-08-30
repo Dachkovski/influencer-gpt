@@ -10,7 +10,6 @@ from clients.d_id import DIdClient
 from clients.heygen import create_heygen_video
 from clients.youtube import YoutubeClient
 import asyncio
-from streamlit import SessionState
 
 # Set Streamlit page configuration
 st.set_page_config(page_title="Influencer GPT", page_icon=":bird:")
@@ -115,7 +114,7 @@ def main():
 
         # Add clear button
         if st.button("Clear"):
-            SessionState.get().clear()
+            st.session_state.get().clear()
 
         # Entscheidung, welche Trendsuchfunktion zu verwenden ist
         if trend_function_choice == "X":
