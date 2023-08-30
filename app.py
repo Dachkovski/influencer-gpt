@@ -33,6 +33,15 @@ avatar_id = os.getenv("YOUR_AVATAR_ID")  # Assuming this is still from an env va
 D_ID_API_KEY = st.session_state.get('D_ID_API_KEY', '')
 d_id_client = DIdClient(api_key=D_ID_API_KEY)
 
+# Uploaded image for the talking head
+uploaded_image = st.file_uploader("Upload an image for the talking head", type=["png", "jpg", "jpeg"])
+if uploaded_image is not None:
+    with open("uploaded_image.png", "wb") as f:
+        f.write(uploaded_image.getbuffer())
+    source_url = "uploaded_image.png"
+else:
+    source_url = "https://cdn.discordapp.com/attachments/1116787243634397345/1146111608129597450/hypercubefx_face_like_terminator_bb7255e5-efca-489d-bf9e-9aeb750a6bef.png"
+
 def search_twitter_trends(topic):
     trends = twitter_client.search_recent_tweets(topic, max_results=10)
     return [trend.text for trend in trends]
@@ -131,7 +140,7 @@ def main():
             else:
                 st.write("Video Generation with D-ID")
 
-                talk = d_id_client.create_talk("https://cdn.discordapp.com/attachments/1116787243634397345/1146111608129597450/hypercubefx_face_like_terminator_bb7255e5-efca-489d-bf9e-9aeb750a6bef.png", edited_script)
+                talk = d_id_client.create_talk(source_url, edited_script)
                 talk_id = talk.get("id")
                 print(f"Talk ID: {talk_id}")
 
