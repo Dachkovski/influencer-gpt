@@ -49,8 +49,8 @@ def search_gpt_trends(topic):
         ]
     )
     
-    # Hier nehmen wir an, dass die Antwort des Modells eine kommagetrennte Liste von Trends ist.
-    # Sie können die Antwortstruktur anpassen, je nachdem, wie Sie das Modell trainieren oder anweisen.
+    # Here we assume that the model's response is a comma-separated list of trends.
+    # You can adjust the response structure depending on how you train or instruct the model.
     trends = completion.choices[0].message["content"].split('\n')
     return trends
 
@@ -79,6 +79,69 @@ async def check_video_status_async(d_id_client, talk_id):
 
 
 
+def get_trends(query):
+    # Initialization
+    if 'trend_engine' not in st.session_state:
+        st.session_state['trend_engine'] = 'GPT'
+    trend_function_choice = st.session_state['trend_engine']
+
+    st.write(f"Searching {trend_function_choice} for ", query)
+
+    # Add clear button
+    if st.button("Clear"):
+        st.session_state.get().clear()
+
+    # Decision on which trend search function to use
+    if trend_function_choice == "X":
+        trends = search_twitter_trends(query)
+    else:
+        trends = search_gpt_trends(query)
+
+    return trends
+
+def generate_video(edited_script):
+    # Initialization
+    if 'video_engine' not in st.session_state:
+        st.session_state['video_engine'] = 'D-ID'
+    video_engine_choice = st.session_state['video_engine']
+
+    st.write(f"Generating Video with {video_engine_choice} for ", query)
+
+    # Decide which trend search function to use
+    if video_engine_choice == "Heygen":
+        video_url = create_heygen_video(edited_script)
+        if video_url:
+            st.write(f"Video created successfully! [Watch here]({video_url})")
+        else:
+            st.error("Failed to create video.")
+    else:
+        st.write("Video Generation with D-ID")
+
+        talk = d_id_client.create_talk(source_url, edited_script)
+        talk_id = talk.get("id")
+        print(f"Talk ID: {talk_id}")
+
+        # Check if the video is ready
+        video_url = asyncio.run(check_video_status_async(d_id_client, talk_id))
+        if video_url:
+            st.write(f"Video URL: {video_url}")
+            # Preview the video
+            preview_video(video_url)
+        else:
+            st.error("Failed to create video.")
+
+    return video_url
+
+def upload_video(video_url):
+    # Ask the user to confirm the upload to YouTube
+    if st.button("Confirm and Upload to YouTube"):
+        # Initialize the YoutubeClient
+        youtube_client = YoutubeClient(st.session_state['YOUTUBE_API_KEY'])
+        youtube_client.authenticate()
+        # Upload the video to YouTube
+        youtube_client.upload_video(video_url, "Generated Video", "This video was generated using AI.", st.session_state['YOUTUBE_VIDEO_CATEGORY'], ["AI", "Generated Video"])
+        st.success("Video uploaded successfully to YouTube!")
+
 def main():
     # Load settings from file if it exists
     if os.path.exists("settings.json"):
@@ -91,72 +154,22 @@ def main():
     query = st.text_input("Trend Topic")
 
     if query:
-        # Initialization
-        if 'trend_engine' not in st.session_state:
-            st.session_state['trend_engine'] = 'GPT'
-        trend_function_choice = st.session_state['trend_engine']
+        trends = get_trends(query)
 
-        st.write(f"Searching {trend_function_choice} for ", query)
-
-        # Add clear button
-        if st.button("Clear"):
-            st.session_state.get().clear()
-
-        # Entscheidung, welche Trendsuchfunktion zu verwenden ist
-        if trend_function_choice == "X":
-            trends = search_twitter_trends(query)
-        else:
-            trends = search_gpt_trends(query)
-
-        # Lassen Sie den Benutzer einen Trend aus der Liste auswählen
+        # Let the user select a trend from the list
         selected_trend = st.selectbox("Select a trend", trends)
 
-        # Verwenden Sie den ausgewählten Trend, um das Skript zu generieren
+        # Use the selected trend to generate the script
         script = create_video_script(selected_trend)
         
-        # Lassen Sie den Benutzer das generierte Skript bearbeiten
+        # Let the user edit the generated script
         edited_script = st.text_area("Edit the generated script:", script)
         
         # Button to confirm editing and proceed to video generation
         if st.button("Confirm and Generate Video"):
             # Use the edited script for video generation
-            # Initialization
-            if 'video_engine' not in st.session_state:
-                st.session_state['video_engine'] = 'D-ID'
-            video_engine_choice = st.session_state['video_engine']
-
-            st.write(f"Generating Video with {video_engine_choice} for ", query)
-        
-            # Decide which trend search function to use
-            if video_engine_choice == "Heygen":
-                video_url = create_heygen_video(edited_script)
-                if video_url:
-                    st.write(f"Video created successfully! [Watch here]({video_url})")
-                else:
-                    st.error("Failed to create video.")
-            else:
-                st.write("Video Generation with D-ID")
-
-                talk = d_id_client.create_talk(source_url, edited_script)
-                talk_id = talk.get("id")
-                print(f"Talk ID: {talk_id}")
-
-                # Check if the video is ready
-                video_url = asyncio.run(check_video_status_async(d_id_client, talk_id))
-                if video_url:
-                    st.write(f"Video URL: {video_url}")
-                    # Preview the video
-                    preview_video(video_url)
-                    # Ask the user to confirm the upload to YouTube
-                    if st.button("Confirm and Upload to YouTube"):
-                        # Initialize the YoutubeClient
-                        youtube_client = YoutubeClient(st.session_state['YOUTUBE_API_KEY'])
-                        youtube_client.authenticate()
-                        # Upload the video to YouTube
-                        youtube_client.upload_video(video_url, "Generated Video", "This video was generated using AI.", st.session_state['YOUTUBE_VIDEO_CATEGORY'], ["AI", "Generated Video"])
-                        st.success("Video uploaded successfully to YouTube!")
-                else:
-                    st.error("Failed to create video.")
+            video_url = generate_video(edited_script)
+            upload_video(video_url)
 
 
 import concurrent.futures
