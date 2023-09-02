@@ -65,7 +65,8 @@ if st.button("Save Settings"):
         'D_ID_API_KEY': st.session_state['D_ID_API_KEY'],
         'YOUTUBE_API_KEY': st.session_state['YOUTUBE_API_KEY'],
         'trend_engine': st.session_state['trend_engine'],
-        'video_engine': st.session_state['video_engine']
+        'video_engine': st.session_state['video_engine'],
+        'last_uploaded_image': st.session_state.get('last_uploaded_image', '')
     }
     
     # Save settings data to a JSON file

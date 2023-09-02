@@ -63,7 +63,7 @@ def create_video_script(topic):
     model="gpt-3.5-turbo",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": topic}
+        {"role": "user", "content": f"create a viral shortform video skript for a talking head about: {topic}. Give just the script to say, no meta desciption or anything else."}
     ]
     )
     script = completion.choices[0].message.get("content")
@@ -99,7 +99,7 @@ def get_trends(query):
 
     return trends
 
-def generate_video(edited_script):
+def generate_video(edited_script, source_url):
     # Initialization
     if 'video_engine' not in st.session_state:
         st.session_state['video_engine'] = 'D-ID'
@@ -142,7 +142,10 @@ def upload_video(video_url):
         youtube_client.upload_video(video_url, "Generated Video", "This video was generated using AI.", st.session_state['YOUTUBE_VIDEO_CATEGORY'], ["AI", "Generated Video"])
         st.success("Video uploaded successfully to YouTube!")
 
-def main():
+def preview_video(video_url):
+    st.video(video_url)
+    
+def load_settings():
     # Load settings from file if it exists
     if os.path.exists("settings.json"):
         with open("settings.json", "r") as f:
@@ -150,6 +153,9 @@ def main():
         
         for key, value in settings_data.items():
             st.session_state[key] = value
+
+def main():
+    load_settings()
     st.header("Influencer GPT :bird:")
     query = st.text_input("Trend Topic")
 
@@ -168,7 +174,8 @@ def main():
         # Button to confirm editing and proceed to video generation
         if st.button("Confirm and Generate Video"):
             # Use the edited script for video generation
-            video_url = generate_video(edited_script)
+            source_url = st.session_state.get('last_uploaded_image', '')
+            video_url = generate_video(edited_script, source_url)
             upload_video(video_url)
 
 
@@ -182,5 +189,4 @@ if __name__ == '__main__':
     # Submit the schedule_page function to the executor
     future = executor.submit(schedule)
 
-def preview_video(video_url):
-    st.video(video_url)
+
