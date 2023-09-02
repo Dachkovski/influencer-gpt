@@ -3,8 +3,6 @@
 import streamlit as st
 import json
 
-# Set Streamlit page configuration
-st.set_page_config(page_title="Settings", page_icon="📈")
 
 # Display header and description
 st.header("Settings")

@@ -12,8 +12,6 @@ from clients.youtube import YoutubeClient
 import asyncio
 from pages import schedule
 
-# Set Streamlit page configuration
-st.set_page_config(page_title="Influencer GPT", page_icon=":bird:")
 
 # Load environment variables
 load_dotenv()
