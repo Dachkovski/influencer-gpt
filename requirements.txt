@@ -6,3 +6,4 @@ python-dotenv==1.0.0
 Requests==2.31.0
 streamlit==1.26.0
 tweepy==4.14.0
+schedule

@@ -39,6 +39,23 @@ st.session_state['YOUTUBE_VIDEO_CATEGORY'] = st.selectbox(
     ("Film & Animation", "Autos & Vehicles", "Music", "Pets & Animals", "Sports", "Travel & Events", "Gaming", "People & Blogs", "Comedy", "Entertainment", "News & Politics", "Howto & Style", "Education", "Science & Technology", "Nonprofits & Activism")
 )
 
+# Uploaded image for the talking head
+uploaded_image = st.file_uploader("Upload an image for the talking head", type=["png", "jpg", "jpeg"])
+if uploaded_image is not None:
+    with open("uploaded_image.png", "wb") as f:
+        f.write(uploaded_image.getbuffer())
+    source_url = "uploaded_image.png"
+    # Store the last uploaded image in a session variable
+    st.session_state['last_uploaded_image'] = "uploaded_image.png"
+else:
+    # Option to reuse the last uploaded image
+    if 'last_uploaded_image' in st.session_state and st.button("Click on the image to reuse it"):
+        st.image(st.session_state['last_uploaded_image'])
+        source_url = st.session_state['last_uploaded_image']
+    else:
+        source_url = "https://cdn.discordapp.com/attachments/1116787243634397345/1146111608129597450/hypercubefx_face_like_terminator_bb7255e5-efca-489d-bf9e-9aeb750a6bef.png"
+
+
 # Save button to persistently save the settings
 if st.button("Save Settings"):
     settings_data = {
