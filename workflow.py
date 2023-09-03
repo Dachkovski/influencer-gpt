@@ -5,15 +5,12 @@ from app.upload_video import upload_video
 
 def automatic_workflow(query, session_state):
     # Initialize trend_engine if it doesn't exist in session_state
-    if 'trend_engine' not in session_state:
-        session_state['trend_engine'] = 'GPT'
+    session_state['trend_engine'] = session_state.get('trend_engine', 'GPT')
     # Initialize video_engine if it doesn't exist in session_state
-    if 'video_engine' not in session_state:
-        session_state['video_engine'] = 'D-ID'
+    session_state['video_engine'] = session_state.get('video_engine', 'D-ID')
     # Initialize last_uploaded_image if it doesn't exist in session_state
-    if 'last_uploaded_image' not in session_state:
-        session_state['last_uploaded_image'] = ''
-    trends = get_trends(query)
+    session_state['last_uploaded_image'] = session_state.get('last_uploaded_image', '')
+    trends = get_trends(query, session_state)
     selected_trend = trends[0]
     script = create_video_script(selected_trend)
     source_url = session_state.get('last_uploaded_image', '')

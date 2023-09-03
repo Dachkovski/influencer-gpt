@@ -27,11 +27,11 @@ def search_trends(topic, source):
         trends = completion.choices[0].message["content"].split('\n')
         return trends
 
-def get_trends(query):
+def get_trends(query, session_state):
     # Initialization
-    if 'trend_engine' not in st.session_state:
-        st.session_state['trend_engine'] = 'GPT'
-    trend_function_choice = st.session_state['trend_engine']
+    if 'trend_engine' not in session_state:
+        session_state['trend_engine'] = 'GPT'
+    trend_function_choice = session_state['trend_engine']
 
     st.write(f"Searching {trend_function_choice} for ", query)
 
