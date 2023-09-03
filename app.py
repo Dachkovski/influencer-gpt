@@ -10,7 +10,6 @@ from clients.d_id import DIdClient
 from clients.heygen import create_heygen_video
 from clients.youtube import YoutubeClient
 import asyncio
-from pages import schedule
 
 
 # Load environment variables
@@ -152,6 +151,7 @@ def load_settings():
         for key, value in settings_data.items():
             st.session_state[key] = value
 
+
 def main():
     load_settings()
     st.header("Influencer GPT :bird:")
@@ -181,10 +181,6 @@ import concurrent.futures
 
 if __name__ == '__main__':
     main()
-    # Create a ThreadPoolExecutor
-    executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
-    
-    # Submit the schedule_page function to the executor
-    future = executor.submit(schedule)
+
 
 
