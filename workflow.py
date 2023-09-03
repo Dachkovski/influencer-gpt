@@ -1,4 +1,7 @@
-from app import get_trends, create_video_script, generate_video, upload_video
+from app.get_trends import get_trends
+from app.create_video_script import create_video_script
+from app.generate_video import generate_video
+from app.upload_video import upload_video
 
 def automatic_workflow(query, session_state):
     # Initialize trend_engine if it doesn't exist in session_state

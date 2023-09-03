@@ -12,7 +12,7 @@ st.title("Schedule a Post")
 # User input for topic, date, and time
 topic = st.text_input("Topic")
 date = st.date_input("Date", min_value=datetime.today())
-time = st.time_input("Time")
+time_input = st.time_input("Time")
 
 if st.button("Confirm"):
 
@@ -25,7 +25,7 @@ if st.button("Confirm"):
         # First we load existing data into a dict.
         file_data = json.load(file)
         # Join new_data with file_data
-        file_data[topic] = {"date": str(date), "time": str(time)}
+        file_data[topic] = {"date": str(date), "time": str(time_input)}
         # Sets file's current position at offset.
         file.seek(0)
         # convert back to json.
