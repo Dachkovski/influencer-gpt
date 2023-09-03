@@ -2,9 +2,14 @@ import threading
 import time
 from workflow import automatic_workflow
 import streamlit as st
+from streamlit.runtime.scriptrunner import add_script_run_ctx
+
 import json
 from datetime import datetime
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 st.title("Schedule a Post")
@@ -32,6 +37,9 @@ if st.button("Confirm"):
         json.dump(file_data, file, indent=4)
 
 def check_schedules():
+    logging.info("check_schedules function called")
+    # Initialize trend_engine if it doesn't exist in st.session_state
+    st.session_state['trend_engine'] = st.session_state.get('trend_engine', 'GPT')
     while True:
         with open('scheduled_posts.json', 'r') as file:
             scheduled_posts = json.load(file)
@@ -39,9 +47,6 @@ def check_schedules():
                 details = scheduled_posts[topic]
                 # Check if the current time is equal to or later than the scheduled time
                 if datetime.now() >= datetime.strptime(details['date'] + ' ' + details['time'], '%Y-%m-%d %H:%M:%S'):
-                    # Initialize trend_engine if it doesn't exist in st.session_state
-                    if 'trend_engine' not in st.session_state:
-                        st.session_state['trend_engine'] = 'GPT'
                     # Call the automatic_workflow function with the topic and st.session_state as the arguments
                     automatic_workflow(topic, st.session_state)
                     # Delete the scheduled post from the JSON file
@@ -51,7 +56,20 @@ def check_schedules():
         time.sleep(60)  # Check every minute
 
 # Start the check_schedules function in a new thread
-threading.Thread(target=check_schedules, daemon=True).start()
+def start_thread():
+    logging.info("start_thread function called")
+    if 'thread' not in st.session_state or not st.session_state['thread'].is_alive():
+        logging.info("Starting a new thread")
+        t1 = threading.Thread(target=check_schedules, daemon=True)
+        add_script_run_ctx(t1)
+        st.session_state['thread'] = t1
+        st.session_state['thread'].start()
+
+# Call the function to start the thread only if it's not already running
+if 'thread' not in st.session_state or not st.session_state['thread'].is_alive():
+    start_thread()
+
+    
 
 # Load the scheduled posts
 with open('scheduled_posts.json', 'r') as file:

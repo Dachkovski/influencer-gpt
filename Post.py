@@ -58,13 +58,15 @@ def main():
     query = st.text_input("Trend Topic")
 
     if query:
-        trends = get_trends(query)
+        with st.spinner('Loading trends...'):
+            trends = get_trends(query, st.session_state)
 
         # Let the user select a trend from the list
-        selected_trend = st.selectbox("Select a trend", trends)
+        selected_trend = st.radio("Select a trend", trends)
 
-        # Use the selected trend to generate the script
-        script = create_video_script(selected_trend)
+        with st.spinner('Generating script...'):
+            # Use the selected trend to generate the script
+            script = create_video_script(selected_trend)
         
         # Let the user edit the generated script
         edited_script = st.text_area("Edit the generated script:", script)
